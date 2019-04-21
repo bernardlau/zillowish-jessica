@@ -1,0 +1,13 @@
+# to run: artillery run putTest.yml
+# with debug: DEBUG=http artillery run putTest.yml
+config:
+  target: 'http://localhost:3002'
+  phases:
+    - duration: 180
+      arrivalRate: 400
+  processor: './getRandomId.js'
+scenarios:
+  - flow:
+    - function: "getRandomId"
+    - put:
+        url: "/gallery/{{photoId}}/photo/{{photo}}/img/{{randomURL}}"

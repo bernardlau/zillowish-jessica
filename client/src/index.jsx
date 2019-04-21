@@ -95,7 +95,8 @@ class Zillow extends React.Component {
       },
       value: '',
       mainPage: true,
-      index: {}
+      index: {},
+      url: "localhost"
     };
     this.deletePhoto = this.deletePhoto.bind(this);
     this.closePhotoModal = this.closePhotoModal.bind(this);
@@ -105,16 +106,15 @@ class Zillow extends React.Component {
     var path = window.location.pathname.split('/');
     var house = path[1];
     var self = this;
-    // var url = this.state.value;
-    const {photoSelected, value} = this.state;
+    const {photoSelected, value, url} = this.state;
     $.ajax({
       method: 'PUT',
-      url: `http://localhost:3002/gallery/${house}/photo/${photoSelected}/url/${value}`,
+      url: `http://${url}:3002/gallery/${house}/photo/${photoSelected}/url/${value}`,
       success: function(data) {
         //update gallery
         $.ajax({
           method: 'GET',
-          url: `http://localhost:3002/gallery/${house}`,
+          url: `http://${url}:3002/gallery/${house}`,
           success: function(data) {
             var result = {
               main: data[0],
@@ -133,7 +133,6 @@ class Zillow extends React.Component {
     this.closePhotoModal();
   }
   handleChange(event) {
-    // this.setState({value: event.target.value});
     const {value} = event.target;
     this.setState({value});
   }
@@ -143,12 +142,12 @@ class Zillow extends React.Component {
     var self = this;
     $.ajax({
       method: 'DELETE',
-      url: `http://localhost:3002/gallery/${house}/photo/${this.state.photoSelected}`,
+      url: `http://${this.state.url}:3002/gallery/${house}/photo/${this.state.photoSelected}`,
       success: function(data) {
         //update gallery
         $.ajax({
           method: 'GET',
-          url: `http://localhost:3002/gallery/${house}`,
+          url: `http://${self.state.url}:3002/gallery/${house}`,
           success: function(data) {
             var result = {
               main: data[0],
@@ -241,7 +240,7 @@ class Zillow extends React.Component {
     var house = path[1];
     $.ajax({
       method: 'GET',
-      url: `http://localhost:3002/gallery/${house}`,
+      url: `http://${this.state.url}:3002/gallery/${house}`,
       success: function(data){
         console.log('data', data)
         var result = {

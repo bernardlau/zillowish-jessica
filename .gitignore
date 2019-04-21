@@ -2,3 +2,6 @@ node_modules
 config.js
 newrelic.js
 newrelic_agent.log
+temp.txt
+idData.csv
+errorLog.js

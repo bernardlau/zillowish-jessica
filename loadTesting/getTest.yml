@@ -1,0 +1,22 @@
+# to run: artillery run getTest.yml
+# with debug: DEBUG=http artillery run getTest.yml
+config:
+  target: 'http://localhost:3002'
+  phases:
+    - duration: 120
+      arrivalRate: 500
+      # rampTo: 10
+  # error logging:
+  # processor: './errorLog.js'
+  processor: './getRandomId.js'
+  # payload:
+  #   path: "./idData.csv"
+  #   fields:
+  #     - "id"
+scenarios:
+  - flow:
+    - function: "getRandomId"
+    - get:
+        url: "/gallery/{{photoId}}"
+        # for logging to error file
+        # afterResponse: "logBody"

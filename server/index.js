@@ -58,7 +58,7 @@ app.put('/gallery/:id/photo/:photo/img/:img', (req, res) => {
     if (err) {
       res.status(400).send();
     } else {
-      res.status(200).send();
+      res.status(200).send("Successfully updated photo");
     }
   });
 });

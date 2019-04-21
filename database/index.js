@@ -144,24 +144,22 @@ var checkHouseID = (id, cb) => {
 //returns array for photos belonging to a specific house_id
 var getImg = (house_id, cb) => {
     //check if house id exists
-   checkHouseID(house_id, function(houseExists){
-     if(houseExists){
-      return knex('photos').where({
-        house_id: house_id
-      })
-        .select ('img_url', 'img_order')
-        .orderBy('img_order')
-        .then ((rows) => {
-          //is passing when house_id does not exist?
-          cb (null, rows);
-        })
-        .catch ( (error) => {
-          console.log('ERROR: ', error);
-          cb (error);
-        });
+    return knex('photos').where({
+      house_id: house_id
+    })
+    .select ('img_url', 'img_order')
+    .orderBy('img_order')
+    .then ((rows) => {
+      //is passing when house_id does not exist?
+      if (rows.length <= 0) {
+        cb (null, [{"img_url":"https://loremflickr.com/250/200?error=1","img_order":'0'}]);
       } else {
-        return cb(true, null);
+        cb (null, rows);
       }
+    })
+    .catch ( (error) => {
+      console.log('ERROR: ', error);
+      cb (null, [{"img_url":"https://loremflickr.com/250/200?error=1","img_order":'0'}]);
     });
 };
 
