@@ -125,32 +125,16 @@ var shiftImgs = (gallery, status, cb) => {
   return updateEachImg(start, end, cb);
 };
 
-var checkHouseID = (id, cb) => {
-  knex('photos').where({
-    house_id: id
-  })
-  .select('*')
-    .then((rows) => {
-      if(rows.length <= 0) return cb(false);
-      return cb(true);
-    })
-    .catch((error) => {
-      console.log('error');
-      return false;
-    });
-};
 /******************************************* */
 
 //returns array for photos belonging to a specific house_id
 var getImg = (house_id, cb) => {
-    //check if house id exists
     return knex('photos').where({
       house_id: house_id
     })
     .select ('img_url', 'img_order')
     .orderBy('img_order')
     .then ((rows) => {
-      //is passing when house_id does not exist?
       if (rows.length <= 0) {
         cb (null, [{"img_url":"https://loremflickr.com/250/200?error=1","img_order":'0'}]);
       } else {

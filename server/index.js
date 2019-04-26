@@ -7,21 +7,40 @@ var db = require('../database/index');
 var cors = require('cors');    
 var port = 3002;
 
+var redis = require('redis');
+var REDIS_PORT = process.env.REDIS_PORT;
+var client = redis.createClient(REDIS_PORT);
+
 app.use(express.static(__dirname + '/../client/dist', {maxAge: 5000})); //sets maxAge to 5sec
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({origin:"http://localhost:3000"}));
  
-app.get('/gallery/:id',function (req, res) {
+app.get('/gallery/:id', cache, function (req, res) {
   var id = Number(req.params.id);
   db.getImg(id, (err, data)=> {
     if (err) {
       res.status(400).send(err);
     } else {
+      client.set(JSON.stringify(id), JSON.stringify(data));
       res.status(200).send(data);
     }
   });
 });
+
+function cache(req, res, next) {
+    const id = JSON.stringify(Number(req.params.id));
+    client.get(id, (err, data) => {
+      if (err) {
+        throw err;
+      }
+      if (data !== null) {
+        res.send(200).send(JSON.parse(data));
+      } else {
+        next();
+      }
+    });
+}
 
 app.post('/gallery/update', (req, res) => {
   var pic = {

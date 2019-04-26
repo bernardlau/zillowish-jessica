@@ -111,7 +111,6 @@ class Zillow extends React.Component {
       method: 'PUT',
       url: `http://${url}:3002/gallery/${house}/photo/${photoSelected}/url/${value}`,
       success: function(data) {
-        //update gallery
         $.ajax({
           method: 'GET',
           url: `http://${url}:3002/gallery/${house}`,
@@ -144,7 +143,6 @@ class Zillow extends React.Component {
       method: 'DELETE',
       url: `http://${this.state.url}:3002/gallery/${house}/photo/${this.state.photoSelected}`,
       success: function(data) {
-        //update gallery
         $.ajax({
           method: 'GET',
           url: `http://${self.state.url}:3002/gallery/${house}`,
